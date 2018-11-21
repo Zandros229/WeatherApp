@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     public static String BaseUrl = "https://openweathermap.org/";
-    public static String AppId = "c268bf8f4ae88e0becaed771bb0b01b9";
+    public static String AppId = "b6907d289e10d714a6e88b30761fae22";
     public static String lat = "51.75";
     public static String lon = "19.47";
 
