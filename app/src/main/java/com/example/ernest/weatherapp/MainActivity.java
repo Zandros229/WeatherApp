@@ -1,7 +1,9 @@
 package com.example.ernest.weatherapp;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import retrofit2.Call;
@@ -14,18 +16,32 @@ public class MainActivity extends AppCompatActivity {
 
     public static String BaseUrl = "https://openweathermap.org/";
     public static String AppId = "b6907d289e10d714a6e88b30761fae22";
-    public static String lat = "51.75";
-    public static String lon = "19.47";
+    public static String lat = "-33.8";
+    public static String lon = "151.2";
 
-    private TextView weatherData;
+    private TextView country;
+    private TextView city;
+    private TextView temp;
+    private TextView sky;
+    private TextView humindity;
+    private TextView pressure;
+    private ImageView imageTemp;
+    private ImageView imageViewHumnindity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        weatherData = findViewById(R.id.textView);
-
+        country = findViewById(R.id.Country);
+        city = findViewById(R.id.City);
+        temp=findViewById(R.id.Temperature);
+        sky=findViewById(R.id.sky);
+        humindity=findViewById(R.id.Humindity);
+        pressure=findViewById(R.id.Preassure);
+        imageTemp=findViewById(R.id.imageViewTemp);
+        imageViewHumnindity=findViewById(R.id.imageViewHumindity);
+        getCurrentData();
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener()
         {
 
@@ -52,40 +68,28 @@ public class MainActivity extends AppCompatActivity {
                     WeatherResponse weatherResponse = (WeatherResponse) response.body();
                     assert weatherResponse != null;
 
-                    String stringBuilder = "Country: " +
-                            weatherResponse.sys.country +
-                            "\n" +
-                            "City:" +
-                            weatherResponse.name +
-                            "\n" +
-                            "Temperature: " +
-                            weatherResponse.main.temp +
-                            "\n" +
-                            "Temperature(Min): " +
-                            weatherResponse.main.temp_min +
-                            "\n" +
-                            "Temperature(Max): " +
-                            weatherResponse.main.temp_max +
-                            "\n" +
-                            "Sky: " +
-                            weatherResponse.weather[0].description +
-                            "\n" +
-                            "Humidity: " +
-                            weatherResponse.main.humidity +
-                            "\n" +
-                            "Pressure: " +
-                            weatherResponse.main.pressure;
-                    weatherData.setText(stringBuilder);
+                    country.setText("Country "+weatherResponse.sys.country);
+                    city.setText("City "+weatherResponse.name);
+                    temp.setText("Temp " +String.valueOf(weatherResponse.main.temp));
+                    sky.setText("sky "+weatherResponse.weather[0].description);
+                    humindity.setText("humindity: "+ String.valueOf(weatherResponse.main.humidity));
+                    pressure.setText("pressure "+String.valueOf(weatherResponse.main.pressure));
+                    if(weatherResponse.main.temp>20)
+                        imageTemp.setImageDrawable(getResources().getDrawable(R.drawable.hot));
+                    if(weatherResponse.main.humidity<50)
+                        imageViewHumnindity.setImageDrawable(getResources().getDrawable(R.drawable.lowrain));
+
+
                 }
                 else {
-                    weatherData.setText(String.valueOf(response.code()));
+                    country.setText(String.valueOf(response.code()));
                 }
             }
 
             @Override
             public void onFailure(Call call, Throwable t) {
-                weatherData.setText(t.getMessage());
-                weatherData.setText("cos sie popsulo");
+                country.setText(t.getMessage());
+                country.setText("cos sie popsulo");
             }
         });
     }
